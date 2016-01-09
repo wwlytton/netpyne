@@ -1,5 +1,5 @@
 """
-params.py 
+params.py
 
 netParams is a dict containing a set of network parameters using a standardized structure
 
@@ -9,7 +9,8 @@ Contributors: salvadordura@gmail.com
 """
 
 from pylab import array
-from utils import importCell
+from params import utils
+from params.utils import importCell
 
 
 netParams = {}  # dictionary to store sets of network parameters
@@ -56,7 +57,7 @@ cellRule = {'label': 'IT', 'conditions': {'cellType': 'IT'}, 'sections': {}}
 soma = {'geom': {}, 'topol': {}, 'mechs': {}, 'pointps':{}, 'syns': {}}  #  soma
 soma['geom'] = {'diam': 18.8, 'L': 18.8, 'Ra': 123.0}
 soma['mechs']['hh'] = {'gnabar': 1, 'gkbar': 0.036, 'gl': 0.003, 'el': -70} # HH
-soma['pointps']['Izhi2007b'] = izhiParams['RS'] 
+soma['pointps']['Izhi2007b'] = izhiParams['RS']
 soma['syns']['AMPA'] = {'type': 'Exp2Syn', 'loc': 0.5, 'tau1': 0.05, 'tau2':5.3, 'e': 0}  # AMPA
 soma['syns']['NMDA'] = {'type': 'Exp2Syn', 'loc': 0.5, 'tau1': 0.15, 'tau2': 1.50, 'e': 0}  # NMDA
 soma['syns']['GABAA'] = {'type': 'Exp2Syn', 'loc': 0.5, 'tau1': 0.07, 'tau2': 9.1, 'e': -80}  # GABAA
@@ -68,8 +69,8 @@ netParams['cellParams'].append(cellRule)  # add dict to list of cell properties
 cellRule = {'label': 'PT', 'conditions': {'cellType': 'PT'}, 'sections': {}}
 soma = {'geom': {}, 'topol': {}, 'mechs': {}, 'pointps':{}, 'syns': {}}  #  soma
 soma['geom'] = {'diam': 18.8, 'L': 18.8, 'Ra': 123.0}
-soma['mechs']['hh'] = {'gnabar': 1, 'gkbar': 0.036, 'gl': 0.003, 'el': -70} # HH 
-soma['pointps']['Izhi2007b'] = izhiParams['IB'] 
+soma['mechs']['hh'] = {'gnabar': 1, 'gkbar': 0.036, 'gl': 0.003, 'el': -70} # HH
+soma['pointps']['Izhi2007b'] = izhiParams['IB']
 soma['syns']['AMPA'] = {'type': 'Exp2Syn', 'loc': 0.5, 'tau1': 0.05, 'tau2':5.3, 'e': 0}  # AMPA
 soma['syns']['NMDA'] = {'type': 'Exp2Syn', 'loc': 0.5, 'tau1': 0.15, 'tau2': 1.50, 'e': 0}  # NMDA
 soma['syns']['GABAA'] = {'type': 'Exp2Syn', 'loc': 0.5, 'tau1': 0.07, 'tau2': 9.1, 'e': -80}  # GABAA
@@ -81,8 +82,8 @@ netParams['cellParams'].append(cellRule)  # add dict to list of cell properties
 cellRule = {'label': 'CT', 'conditions': {'cellType': 'CT'}, 'sections': {}}
 soma = {'geom': {}, 'topol': {}, 'mechs': {}, 'pointps':{}, 'syns': {}, 'Izhi2007Type': 'RS'}  #  soma
 soma['geom'] = {'diam': 18.8, 'L': 18.8, 'Ra': 123.0}
-soma['mechs']['hh'] = {'gnabar': 1, 'gkbar': 0.036, 'gl': 0.003, 'el': -70} # HH 
-soma['pointps']['Izhi2007b'] = izhiParams['RS'] 
+soma['mechs']['hh'] = {'gnabar': 1, 'gkbar': 0.036, 'gl': 0.003, 'el': -70} # HH
+soma['pointps']['Izhi2007b'] = izhiParams['RS']
 soma['syns']['AMPA'] = {'type': 'Exp2Syn', 'loc': 0.5, 'tau1': 0.05, 'tau2':5.3, 'e': 0}  # AMPA
 soma['syns']['NMDA'] = {'type': 'Exp2Syn', 'loc': 0.5, 'tau1': 0.15, 'tau2': 1.50, 'e': 0}  # NMDA
 soma['syns']['GABAA'] = {'type': 'Exp2Syn', 'loc': 0.5, 'tau1': 0.07, 'tau2': 9.1, 'e': -80}  # GABAA
@@ -94,21 +95,21 @@ netParams['cellParams'].append(cellRule)  # add dict to list of cell properties
 cellRule = {'label': 'SOM', 'conditions': {'cellType': 'SOM'}, 'sections': {}}
 soma = {'geom': {}, 'topol': {}, 'mechs': {}, 'pointps':{}, 'syns': {}, 'Izhi2007Type': 'LTS'}  #  soma
 soma['geom'] = {'diam': 18.8, 'L': 18.8, 'Ra': 123.0}
-soma['mechs']['hh'] = {'gnabar': 1, 'gkbar': 0.036, 'gl': 0.003, 'el': -70} # HH 
-soma['pointps']['Izhi2007b'] = izhiParams['LTS'] 
+soma['mechs']['hh'] = {'gnabar': 1, 'gkbar': 0.036, 'gl': 0.003, 'el': -70} # HH
+soma['pointps']['Izhi2007b'] = izhiParams['LTS']
 soma['syns']['AMPA'] = {'type': 'Exp2Syn', 'loc': 0.5, 'tau1': 0.05, 'tau2':5.3, 'e': 0}  # AMPA
 soma['syns']['NMDA'] = {'type': 'Exp2Syn', 'loc': 0.5, 'tau1': 0.15, 'tau2': 1.50, 'e': 0}  # NMDA
 soma['syns']['GABAA'] = {'type': 'Exp2Syn', 'loc': 0.5, 'tau1': 0.07, 'tau2': 9.1, 'e': -80}  # GABAA
 soma['syns']['GABAB'] = {'type': 'Exp2Syn', 'loc': 0.5, 'tau1': 0.07, 'tau2': 9.1, 'e': -80}  # GABAB
 cellRule['sections'] = {'soma': soma}  # add sections to dict
-netParams['cellParams'].append(cellRule)  # add dict to list of cell properties 
+netParams['cellParams'].append(cellRule)  # add dict to list of cell properties
 
 ## PV cell params
 cellRule = {'label': 'PV', 'conditions': {'cellType': 'PV'}, 'sections': {}}
 soma = {'geom': {}, 'topol': {}, 'mechs': {}, 'pointps':{}, 'syns': {}, 'Izhi2007Type': 'FS'}  #  soma
 soma['geom'] = {'diam': 18.8, 'L': 18.8, 'Ra': 123.0}
-soma['mechs']['hh'] = {'gnabar': 1, 'gkbar': 0.036, 'gl': 0.003, 'el': -70} # HH 
-soma['pointps']['Izhi2007b'] = izhiParams['FS'] 
+soma['mechs']['hh'] = {'gnabar': 1, 'gkbar': 0.036, 'gl': 0.003, 'el': -70} # HH
+soma['pointps']['Izhi2007b'] = izhiParams['FS']
 soma['syns']['AMPA'] = {'type': 'Exp2Syn', 'loc': 0.5, 'tau1': 0.05, 'tau2':5.3, 'e': 0}  # AMPA
 soma['syns']['NMDA'] = {'type': 'Exp2Syn', 'loc': 0.5, 'tau1': 0.15, 'tau2': 1.50, 'e': 0}  # NMDA
 soma['syns']['GABAA'] = {'type': 'Exp2Syn', 'loc': 0.5, 'tau1': 0.07, 'tau2': 9.1, 'e': -80}  # GABAA
@@ -118,8 +119,8 @@ netParams['cellParams'].append(cellRule)  # add dict to list of cell properties
 
 
 ## create list of populations, where each item contains a dict with the pop params
-netParams['popParams'] = []  
-     
+netParams['popParams'] = []
+
 netParams['popParams'].append({'popLabel': 'IT_L23', 'cellModel': 'Izhi2007b', 'cellType': 'IT',  'projTarget': '', 'yfracRange': [0.1, 0.26], 'density': lambda y:2e3*y}) #  L2/3 IT
 netParams['popParams'].append({'popLabel': 'IT_L4',  'cellModel': 'Izhi2007b', 'cellType': 'IT',  'projTarget': '', 'yfracRange': [0.26, 0.31], 'density': lambda y:2e3*y}) #  L4 IT
 netParams['popParams'].append({'popLabel': 'IT_L5A', 'cellModel': 'Izhi2007b', 'cellType': 'IT',  'projTarget': '', 'yfracRange': [0.31, 0.52], 'density': lambda y:2e3*y}) #  L5A IT
@@ -135,7 +136,7 @@ netParams['popParams'].append({'popLabel': 'PV_L6',  'cellModel': 'Izhi2007b', '
 netParams['popParams'].append({'popLabel': 'SOM_L6', 'cellModel': 'Izhi2007b', 'cellType': 'SOM', 'projTarget': '', 'yfracRange': [0.77, 1.0], 'density': lambda y:0.5e3}) #  L6 SOM (LTS)
 netParams['popParams'].append({'popLabel': 'background', 'cellModel': 'NetStim', 'rate': 100, 'noise': 0.5, 'source': 'random'})  # background inputs
 
-cellsList = [] 
+cellsList = []
 cellsList.append({'cellLabel':'gs15', 'x': 1, 'yfrac': 0.4 , 'z': 2})
 cellsList.append({'cellLabel':'gs21', 'x': 2, 'yfrac': 0.5 , 'z': 3})
 netParams['popParams'].append({'popLabel': 'IT_cells', 'cellModel':'Izhi2007b', 'cellType':'IT', 'projTarget':'', 'cellsList': cellsList}) #  IT individual cells
@@ -149,189 +150,189 @@ netParams['popTagsCopiedToCells'] = ['popLabel', 'cellModel', 'cellType', 'projT
 
 
 # List of connectivity rules/params
-netParams['connParams'] = []  
+netParams['connParams'] = []
 
 netParams['connParams'].append({'preTags': {'popLabel': 'background'}, 'postTags': {'cellType': ['IT', 'PT', 'CT', 'PV', 'SOM']}, # background -> All
     'connFunc': 'fullConn',
-    'weight': 10, 
+    'weight': 10,
     'synReceptor': 'NMDA',
-    'delay': 5})  
+    'delay': 5})
 
 netParams['connParams'].append({'preTags': {'cellType': 'IT'}, 'postTags': {'cellType': 'IT'}, # IT->IT rule
     'connFunc': 'probConn',
     'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
-    'weight': (lambda prey,posty: 1), 
+    'weight': (lambda prey,posty: 1),
     'delay': 5,
     'synReceptor': 'AMPA',
-    'annot': 'ITtoITconn'})  
+    'annot': 'ITtoITconn'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'IT'}, 'postTags': {'cellType': 'PT'}, # IT->PT rule
-    'connFunc': 'probConn',    
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda prey,posty: 1), 
-    'delay': 5, 
-    'synReceptor': 'AMPA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda prey,posty: 1),
+    'delay': 5,
+    'synReceptor': 'AMPA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'IT'}, 'postTags': {'cellType': 'CT'}, # IT->CT rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda prey,posty: 1), 
-    'delay': 5, 
-    'synReceptor': 'AMPA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda prey,posty: 1),
+    'delay': 5,
+    'synReceptor': 'AMPA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'IT'}, 'postTags': {'cellType': 'PV'}, # IT->PV rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda prey,posty: 1), 
-    'delay': 5, 
-    'synReceptor': 'GABAA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda prey,posty: 1),
+    'delay': 5,
+    'synReceptor': 'GABAA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'IT'}, 'postTags': {'cellType': 'SOM'}, # IT->SOM rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda prey,posty: 1), 
-    'delay': 5, 
-    'synReceptor': 'AMPA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda prey,posty: 1),
+    'delay': 5,
+    'synReceptor': 'AMPA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'PT'}, 'postTags': {'cellType': 'IT'}, # PT->IT rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda prey,posty: 1), 
-    'delay': 5, 
-    'synReceptor': 'AMPA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda prey,posty: 1),
+    'delay': 5,
+    'synReceptor': 'AMPA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'PT'}, 'postTags': {'cellType': 'PT'}, # PT->PT rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda prey,posty: 1), 
-    'delay': 5, 
-    'synReceptor': 'AMPA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda prey,posty: 1),
+    'delay': 5,
+    'synReceptor': 'AMPA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'PT'}, 'postTags': {'cellType': 'CT'}, # PT->CT rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda prex,posty: 1), 
-    'delay': 5, 
-    'synReceptor': 'AMPA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda prex,posty: 1),
+    'delay': 5,
+    'synReceptor': 'AMPA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'PT'}, 'postTags': {'cellType': 'PV'}, # PT->PV rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda x,y: 1), 
-    'delay': 5, 
-    'synReceptor': 'AMPA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda x,y: 1),
+    'delay': 5,
+    'synReceptor': 'AMPA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'PT'}, 'postTags': {'cellType': 'SOM'}, # PT->SOM rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda x,y: 1), 
-    'delay': 5, 
-    'synReceptor': 'AMPA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda x,y: 1),
+    'delay': 5,
+    'synReceptor': 'AMPA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'CT'}, 'postTags': {'cellType': 'IT'}, # CT->IT rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda x,y: 1), 
-    'delay': 5, 
-    'synReceptor': 'AMPA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda x,y: 1),
+    'delay': 5,
+    'synReceptor': 'AMPA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'CT'}, 'postTags': {'cellType': 'PT'}, # CT->PT rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda x,y: 1), 
-    'delay': 5, 
-    'synReceptor': 'AMPA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda x,y: 1),
+    'delay': 5,
+    'synReceptor': 'AMPA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'CT'}, 'postTags': {'cellType': 'CT'}, # CT->CT rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda x,y: 1), 
-    'delay': 5, 
-    'synReceptor': 'AMPA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda x,y: 1),
+    'delay': 5,
+    'synReceptor': 'AMPA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'CT'}, 'postTags': {'cellType': 'PV'}, # CT->PV rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda x,y: 1), 
-    'delay': 5, 
-    'synReceptor': 'AMPA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda x,y: 1),
+    'delay': 5,
+    'synReceptor': 'AMPA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'CT'}, 'postTags': {'cellType': 'SOM'}, # CT->SOM rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda x,y: 1), 
-    'delay': 5, 
-    'synReceptor': 'AMPA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda x,y: 1),
+    'delay': 5,
+    'synReceptor': 'AMPA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'PV'}, 'postTags': {'cellType': 'IT'}, # PV->IT rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda x,y: 1), 
-    'delay': 5, 
-    'synReceptor': 'GABAA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda x,y: 1),
+    'delay': 5,
+    'synReceptor': 'GABAA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'PV'}, 'postTags': {'cellType': 'PT'}, # PV->PT rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda x,y: 1), 
-    'delay': 5, 
-    'synReceptor': 'GABAA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda x,y: 1),
+    'delay': 5,
+    'synReceptor': 'GABAA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'PV'}, 'postTags': {'cellType': 'CT'}, # PV->CT rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda x,y: 1), 
-    'delay': 5, 
-    'synReceptor': 'GABAA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda x,y: 1),
+    'delay': 5,
+    'synReceptor': 'GABAA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'PV'}, 'postTags': {'cellType': 'PV'}, # PV->PV rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda x,y: 1), 
-    'delay': 5, 
-    'synReceptor': 'AMPA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda x,y: 1),
+    'delay': 5,
+    'synReceptor': 'AMPA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'PV'}, 'postTags': {'cellType': 'SOM'}, # PV->SOM rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda x,y: 1), 
-    'delay': 5, 
-    'synReceptor': 'GABAA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda x,y: 1),
+    'delay': 5,
+    'synReceptor': 'GABAA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'SOM'}, 'postTags': {'cellType': 'IT'}, # SOM->IT rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda x,y: 1), 
-    'delay': 5, 
-    'synReceptor': 'GABAA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda x,y: 1),
+    'delay': 5,
+    'synReceptor': 'GABAA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'SOM'}, 'postTags': {'cellType': 'PT'}, # SOM->PT rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda x,y: 1), 
-    'delay': 5, 
-    'synReceptor': 'GABAA'})               
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda x,y: 1),
+    'delay': 5,
+    'synReceptor': 'GABAA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'SOM'}, 'postTags': {'cellType': 'CT'}, # SOM->CT rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda x,y: 1), 
-    'delay': 5, 
-    'synReceptor': 'GABAA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda x,y: 1),
+    'delay': 5,
+    'synReceptor': 'GABAA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'SOM'}, 'postTags': {'cellType': 'PV'}, # SOM->PV rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda x,y: 1), 
-    'delay': 5, 
-    'synReceptor': 'GABAA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda x,y: 1),
+    'delay': 5,
+    'synReceptor': 'GABAA'})
 
 netParams['connParams'].append({'preTags': {'cellType': 'SOM'}, 'postTags': {'cellType': 'SOM'}, # SOM->SOM rule
-    'connFunc': 'probConn', 
-    'probability': (lambda prey,posty: 0.1*prey+0.01/posty), 
-    'weight': (lambda x,y: 1), 
-    'delay': 5, 
-    'synReceptor': 'GABAA'})  
+    'connFunc': 'probConn',
+    'probability': (lambda prey,posty: 0.1*prey+0.01/posty),
+    'weight': (lambda x,y: 1),
+    'delay': 5,
+    'synReceptor': 'GABAA'})
 
 
 
@@ -355,7 +356,7 @@ simConfig['createPyStruct'] = 1  # create Python structure (simulator-independen
 simConfig['verbose'] = 0 # Whether to write nothing (0) or diagnostic information on events (1)
 
 
-# Recording 
+# Recording
 simConfig['recordTraces'] = True  # whether to record cell traces or not
 simConfig['recdict'] = {'V':{'sec':'soma','pos':0.5,'var':'v'}, 'u':{'sec':'soma', 'pointProcess':'hPoint', 'var':'u'}, 'I':{'sec':'soma', 'pointProcess':'hPoint', 'var':'i'}}
 simConfig['recordStim'] = True  # record spikes of cell stims
@@ -371,7 +372,7 @@ simConfig['saveTxt'] = False # save spikes and conn to txt file
 simConfig['saveDpk'] = False # save to a .dpk pickled file
 
 
-# Analysis and plotting 
+# Analysis and plotting
 simConfig['plotRaster'] = True # Whether or not to plot a raster
 simConfig['plotTracesGids'] = [1] # plot recorded traces for this list of cells
 simConfig['plotPsd'] = False # plot power spectral density
@@ -379,5 +380,3 @@ simConfig['maxspikestoplot'] = 3e8 # Maximum number of spikes to plot
 simConfig['plotConn'] = False # whether to plot conn matrix
 simConfig['plotWeightChanges'] = False # whether to plot weight changes (shown in conn matrix)
 simConfig['plot3dArch'] = False # plot 3d architecture
-
-

@@ -6,7 +6,7 @@ Functions to plot and analyse results
 Contributors: salvadordura@gmail.com
 """
 
-from pylab import mean, arange, bar, vstack,scatter, figure, hold, isscalar, gca, unique, subplot, axes, shape, imshow, colorbar, plot, xlabel, ylabel, title, xlim, ylim, clim, show, zeros, legend, savefig, cm, specgram, get_cmap, psd, ion
+from pylab import mean, arange, bar, vstack,scatter, figure, hold, isscalar, gca, unique, subplot, axes, shape, imshow, colorbar, plot, xlabel, ylabel, title, xlim, ylim, clim, show, zeros, legend, savefig, cm, specgram, get_cmap, psd
 from scipy.io import loadmat
 from scipy import loadtxt, size, array, linspace, ceil
 from datetime import datetime
@@ -28,14 +28,14 @@ def plotData():
     if f.rank == 0:
         plotstart = time() # See how long it takes to plot
         if f.cfg['plotRaster']: # Whether or not to plot
-            if (f.totalSpikes>f.cfg['maxspikestoplot']): 
+            if (f.totalSpikes>f.cfg['maxspikestoplot']):
                 print('  Too many spikes (%i vs. %i)' % (f.totalSpikes, f.cfg['maxspikestoplot'])) # Plot raster, but only if not too many spikes
-            else: 
+            else:
                 print('Plotting raster...')
-                f.analysis.plotRaster() 
+                f.analysis.plotRaster()
         if f.cfg['plotTracesGids']:
             print('Plotting recorded traces ...')
-            f.analysis.plotTraces() 
+            f.analysis.plotTraces()
         if f.cfg['plotConn']:
             print('Plotting connectivity matrix...')
             f.analysis.plotConn()
@@ -50,12 +50,11 @@ def plotData():
             f.analysis.plot3dArch()
         plottime = time()-plotstart # See how long it took
         print('  Done; plotting time = %0.1f s' % plottime)
-        ion()
         show(block=False)
 
-## Raster plot 
-def plotRaster(): 
-    colorList = [[0.42,0.67,0.84],[0.90,0.76,0.00],[0.42,0.83,0.59],[0.90,0.32,0.00],[0.34,0.67,0.67],[0.42,0.82,0.83],[0.90,0.59,0.00],[0.33,0.67,0.47],[1.00,0.85,0.00],[0.71,0.82,0.41],[0.57,0.67,0.33],[1.00,0.38,0.60],[0.5,0.2,0.0],[0.0,0.2,0.5]] 
+## Raster plot
+def plotRaster():
+    colorList = [[0.42,0.67,0.84],[0.90,0.76,0.00],[0.42,0.83,0.59],[0.90,0.32,0.00],[0.34,0.67,0.67],[0.42,0.82,0.83],[0.90,0.59,0.00],[0.33,0.67,0.47],[1.00,0.85,0.00],[0.71,0.82,0.41],[0.57,0.67,0.33],[1.00,0.38,0.60],[0.5,0.2,0.0],[0.0,0.2,0.5]]
     popLabels = [pop.tags['popLabel'] for pop in f.net.pops if pop.tags['cellModel'] not in ['NetStim']]
     popColors = {popLabel: colorList[ipop%len(colorList)] for ipop,popLabel in enumerate(popLabels)} # dict with color for each pop
     gidColors = {cell['gid']: popColors[cell['tags']['popLabel']] for cell in f.net.allCells}  # dict with color for each gid
@@ -74,7 +73,7 @@ def plotRaster():
     spkidColors = [gidColors[spkid] for spkid in spkids]
     figure() # Open a new figure
     fontsiz = 12
-    scatter(f.allSimData['spkt'], spkids, 10, linewidths=1.5, marker='|', color = spkidColors) # Create raster  
+    scatter(f.allSimData['spkt'], spkids, 10, linewidths=1.5, marker='|', color = spkidColors) # Create raster
     xlabel('Time (ms)', fontsize=fontsiz)
     ylabel(ylabelText, fontsize=fontsiz)
     title('cells=%i syns/cell=%0.1f rate=%0.1f Hz' % (f.numCells,f.connsPerCell,f.firingRate), fontsize=fontsiz)
@@ -83,11 +82,10 @@ def plotRaster():
     for popLabel in popLabels[::-1]:
         plot(0,0,color=popColors[popLabel],label=popLabel)
     legend(fontsize=fontsiz)
-    savefig('raster.png')
 
 ## Traces (v,i,g etc) plot
-def plotTraces(): 
-    tracesList = f.cfg['recdict'].keys()
+def plotTraces():
+    tracesList = list(f.cfg['recdict'].keys())
     tracesList.sort()
     gidList = f.cfg['plotTracesGids']
     duration = f.cfg['duration']
@@ -109,22 +107,21 @@ def plotTraces():
                 pass
         subplot(len(tracesList),1,1)
         title('Cell %d'%(int(gid)))
-    savefig('traces.png')
 
 
 ## Plot power spectra density
 def plotPsd():
-    colorspsd=array([[0.42,0.67,0.84],[0.42,0.83,0.59],[0.90,0.76,0.00],[0.90,0.32,0.00],[0.34,0.67,0.67],[0.42,0.82,0.83],[0.90,0.59,0.00],[0.33,0.67,0.47],[1.00,0.85,0.00],[0.71,0.82,0.41],[0.57,0.67,0.33],[1.00,0.38,0.60],[0.5,0.2,0.0],[0.0,0.2,0.5]]) 
+    colorspsd=array([[0.42,0.67,0.84],[0.42,0.83,0.59],[0.90,0.76,0.00],[0.90,0.32,0.00],[0.34,0.67,0.67],[0.42,0.82,0.83],[0.90,0.59,0.00],[0.33,0.67,0.47],[1.00,0.85,0.00],[0.71,0.82,0.41],[0.57,0.67,0.33],[1.00,0.38,0.60],[0.5,0.2,0.0],[0.0,0.2,0.5]])
 
-    lfpv=[[] for c in range(len(f.lfppops))]    
+    lfpv=[[] for c in range(len(f.lfppops))]
     # Get last modified .mat file if no input and plot
     for c in range(len(f.lfppops)):
-        lfpv[c] = f.lfps[:,c]    
+        lfpv[c] = f.lfps[:,c]
     lfptot = sum(lfpv)
-        
+
     # plot pops separately
     plotPops = 0
-    if plotPops:    
+    if plotPops:
         figure() # Open a new figure
         for p in range(len(f.lfppops)):
             psd(lfpv[p],Fs=200, linewidth= 2,color=colorspsd[p])
@@ -237,9 +234,9 @@ def plot3dArch():
     ylocs=[3,2,1]
     zlocs=[0.1,0.5,1.2]
     ax.scatter(xlocs,ylocs, zlocs,  s=10, c=zlocs, edgecolors='none',cmap = 'jet_r' , linewidths=0.0, alpha=1, marker='o')
-    azim = 40  
+    azim = 40
     elev = 60
-    ax.view_init(elev, azim) 
+    ax.view_init(elev, azim)
     #xlim(min(f.xlocs),max(f.xlocs))
     #ylim(min(f.ylocs),max(f.ylocs))
     #ax.set_zlim(min(f.zlocs),max(f.zlocs))
@@ -251,12 +248,12 @@ def plot3dArch():
 ## Create colormap
 def bicolormap(gap=0.1,mingreen=0.2,redbluemix=0.5,epsilon=0.01):
    from matplotlib.colors import LinearSegmentedColormap as makecolormap
-   
+
    mng=mingreen; # Minimum amount of green to add into the colors
    mix=redbluemix; # How much red to mix with the blue an vice versa
    eps=epsilon; # How much of the center of the colormap to make gray
    omg=1-gap # omg = one minus gap
-   
+
    cdict = {'red': ((0.00000, 0.0, 0.0),
                     (0.5-eps, mix, omg),
                     (0.50000, omg, omg),

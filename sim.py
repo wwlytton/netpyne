@@ -1,7 +1,7 @@
 """
-sim.py 
+sim.py
 
-Contains functions related to the simulation (eg. setupRecording, runSim) 
+Contains functions related to the simulation (eg. setupRecording, runSim)
 
 Contributors: salvadordura@gmail.com
 """
@@ -11,8 +11,8 @@ from pylab import mean, zeros, concatenate, vstack, array
 from time import time
 from datetime import datetime
 import inspect
-import cPickle as pk
-import hashlib 
+import pickle as pk
+import hashlib
 from neuron import h, init # Import NEURON
 import framework as f
 from params import default
@@ -24,16 +24,16 @@ from params import default
 def initialize(netParams = {}, simConfig = {}, net = None):
     f.simData = {}  # used to store output simulation data (spikes etc)
     f.gidVec =[] # Empty list for storing GIDs (index = local id; value = gid)
-    f.gidDic = {} # Empty dict for storing GIDs (key = gid; value = local id) -- ~x6 faster than gidVec.index()  
+    f.gidDic = {} # Empty dict for storing GIDs (key = gid; value = local id) -- ~x6 faster than gidVec.index()
     f.lastGid = 0  # keep track of las cell gid
     f.fih = []  # list of func init handlers
 
     if net:
         setNet(f.net)  # set existing external network
-    else: 
+    else:
         setNet(f.Network())  # or create new network
 
-    if netParams: 
+    if netParams:
         setNetParams(netParams)  # set network parameters
 
     setSimCfg(simConfig)  # set simulation configuration
@@ -52,7 +52,7 @@ def setNet(net):
 # Set network params to use in simulation
 ###############################################################################
 def setNetParams(params):
-    for paramName, paramValue in default.netParams.iteritems():  # set default values
+    for paramName, paramValue in default.netParams.items():  # set default values
         if paramName not in params:
             params[paramName] = paramValue
     f.net.params = params
@@ -61,7 +61,7 @@ def setNetParams(params):
 # Set simulation config
 ###############################################################################
 def setSimCfg(cfg):
-    for paramName, paramValue in default.simConfig.iteritems():  # set default values
+    for paramName, paramValue in default.simConfig.items():  # set default values
         if paramName not in cfg:
             cfg[paramName] = paramValue
     f.cfg = cfg
@@ -80,15 +80,15 @@ def createParallelContext():
     f.nhosts = int(f.pc.nhost()) # Find number of hosts
     f.rank = int(f.pc.id())     # rank 0 will be the master
 
-    if f.rank==0: 
+    if f.rank==0:
         f.pc.gid_clear()
 
 
 ###############################################################################
 # Hash function to obtain random value
 ###############################################################################
-def id32(obj): 
-    return int(hashlib.md5(obj).hexdigest()[0:8],16)  # convert 8 first chars of md5 hash in base 16 to int
+def id32(obj):
+    return int(hashlib.md5(obj.encode('utf-8')).hexdigest()[0:8],16)  # convert 8 first chars of md5 hash in base 16 to int
 
 
 ###############################################################################
@@ -101,7 +101,7 @@ def replaceItemObj(obj, keystart, newval):
                 replaceItemObj(item, keystart, newval)
 
     elif type(obj) == dict:
-        for key,val in obj.iteritems():
+        for key,val in obj.items():
             if type(val) in [list, dict]:
                 replaceItemObj(val, keystart, newval)
             if key.startswith(keystart):
@@ -119,7 +119,7 @@ def replaceFuncObj(obj):
                 replaceFuncObj(item)
 
     elif type(obj) == dict:
-        for key,val in obj.iteritems():
+        for key,val in obj.items():
             if type(val) in [list, dict]:
                 replaceFuncObj(val)
             if hasattr(val,'func_name'):
@@ -141,7 +141,7 @@ def replaceNoneObj(obj):
                 replaceNoneObj(item)
 
     elif type(obj) == dict:
-        for key,val in obj.iteritems():
+        for key,val in obj.items():
             if type(val) in [list, dict]:
                 replaceNoneObj(val)
             if val == None:
@@ -162,18 +162,18 @@ def readArgs():
         if len(arg)==2:
             if hasattr(f.s.params,arg[0]) or hasattr(f.s.params,harg[1]): # Check that variable exists
                 if arg[0] == 'outfilestem':
-                    exec('s.'+arg[0]+'="'+arg[1]+'"') # Actually set variable 
-                    if f.rank==0: # messages only come from Master  
+                    exec('s.'+arg[0]+'="'+arg[1]+'"') # Actually set variable
+                    if f.rank==0: # messages only come from Master
                         print('  Setting %s=%s' %(arg[0],arg[1]))
                 else:
-                    exec('p.'+argv) # Actually set variable            
-                    if f.rank==0: # messages only come from Master  
+                    exec('p.'+argv) # Actually set variable
+                    if f.rank==0: # messages only come from Master
                         print('  Setting %s=%r' %(arg[0],eval(arg[1])))
-            else: 
+            else:
                 sys.tracebacklimit=0
                 raise Exception('Reading args from commandline: Variable "%s" not found' % arg[0])
         elif argv=='-mpi':   f.ismpi = True
-        else: pass # ignore -python 
+        else: pass # ignore -python
 
 
 ###############################################################################
@@ -186,13 +186,13 @@ def setupRecording():
     # stim spike recording
     if f.cfg['recordStim']:
         f.simData['stims'] = {}
-        for cell in f.net.cells: 
+        for cell in f.net.cells:
             cell.recordStimSpikes()
 
     # intrinsic cell variables recording
     if f.cfg['recordTraces']:
         for key in f.cfg['recdict'].keys(): f.simData[key] = {}
-        for cell in f.net.cells: 
+        for cell in f.net.cells:
             cell.recordTraces()
 
 
@@ -206,11 +206,11 @@ def runSim():
         runstart = time() # See how long the run takes
     f.pc.set_maxstep(10)
     mindelay = f.pc.allreduce(f.pc.set_maxstep(10), 2) # flag 2 returns minimum value
-    if f.rank==0: print 'Minimum delay (time-step for queue exchange) is ',mindelay
-    init() # 
+    if f.rank==0: print ('Minimum delay (time-step for queue exchange) is ',mindelay)
+    init() #
     #h.cvode.event(f.savestep,savenow)
     f.pc.psolve(f.cfg['duration'])
-    if f.rank==0: 
+    if f.rank==0:
         runtime = time()-runstart # See how long it took
         print('  Done; run time = %0.1f s; real-time ratio: %0.2f.' % (runtime, f.cfg['duration']/1000/runtime))
     f.pc.barrier() # Wait for all hosts to get to this point
@@ -226,7 +226,7 @@ def gatherAllCellTags():
     gather = f.pc.py_alltoall(data)  # collect cells data from other nodes (required to generate connections)
     f.pc.barrier()
     allCellTags = {}
-    for dataNode in gather:         
+    for dataNode in gather:
         allCellTags.update(dataNode)
     del gather, data  # removed unnecesary variables
     return allCellTags
@@ -238,39 +238,39 @@ def gatherAllCellTags():
 ###############################################################################
 def gatherData():
     ## Pack data from all hosts
-    if f.rank==0: 
+    if f.rank==0:
         print('\nGathering spikes...')
         gatherstart = time() # See how long it takes to plot
 
-    nodeData = {'netCells': [c.__getstate__() for c in f.net.cells], 'simData': f.simData} 
+    nodeData = {'netCells': [c.__getstate__() for c in f.net.cells], 'simData': f.simData}
     data = [None]*f.nhosts
     data[0] = {}
-    for k,v in nodeData.iteritems():
-        data[0][k] = v 
+    for k,v in nodeData.items():
+        data[0][k] = v
     gather = f.pc.py_alltoall(data)
     f.pc.barrier()
-    simDataVecs = ['spkt','spkid','stims']+f.cfg['recdict'].keys()
+    simDataVecs = ['spkt','spkid','stims']+list(f.cfg['recdict'].keys())
     if f.rank == 0:
         allCells = []
-        f.allSimData = {} 
+        f.allSimData = {}
         for k in gather[0]['simData'].keys():  # initialize all keys of allSimData dict
             f.allSimData[k] = {}
         #### REPLACE CODE BELOW TO MAKE GENERIC - CHECK FOR DICT VS H.VECTOR AND UPDATE ALLSIMDATA ACCORDINGLY ####
         for node in gather:  # concatenate data from each node
             allCells.extend(node['netCells'])  # extend allCells list
-            for key,val in node['simData'].iteritems():  # update simData dics of dics of h.Vector 
+            for key,val in node['simData'].items():  # update simData dics of dics of h.Vector
                 if key in simDataVecs:          # simData dicts that contain Vectors
-                    if isinstance(val,dict):                
-                        for cell,val2 in val.iteritems():
-                            if isinstance(val2,dict):       
+                    if isinstance(val,dict):
+                        for cell,val2 in val.items():
+                            if isinstance(val2,dict):
                                 f.allSimData[key].update({cell:{}})
-                                for stim,val3 in val2.iteritems():
+                                for stim,val3 in val2.items():
                                     f.allSimData[key][cell].update({stim:list(val3)}) # udpate simData dicts which are dicts of dicts of Vectors (eg. ['stim']['cell_1']['backgrounsd']=h.Vector)
                             else:
                                 f.allSimData[key].update({cell:list(val2)})  # udpate simData dicts which are dicts of Vectors (eg. ['v']['cell_1']=h.Vector)
-                    else:                                   
+                    else:
                         f.allSimData[key] = list(f.allSimData[key])+list(val) # udpate simData dicts which are Vectors
-                else: 
+                else:
                     f.allSimData[key].update(val)           # update simData dicts which are not Vectors
         f.net.allCells = allCells
 
@@ -281,27 +281,27 @@ def gatherData():
         print('  Done; gather time = %0.1f f.' % gathertime)
 
         print('\nAnalyzing...')
-        f.totalSpikes = len(f.allSimData['spkt'])   
-        f.totalConnections = sum([len(cell['conns']) for cell in f.net.allCells])   
+        f.totalSpikes = len(f.allSimData['spkt'])
+        f.totalConnections = sum([len(cell['conns']) for cell in f.net.allCells])
         f.numCells = len(f.net.allCells)
 
-        f.firingRate = float(f.totalSpikes)/f.numCells/f.cfg['duration']*1e3 # Calculate firing rate 
+        f.firingRate = float(f.totalSpikes)/f.numCells/f.cfg['duration']*1e3 # Calculate firing rate
         f.connsPerCell = f.totalConnections/float(f.numCells) # Calculate the number of connections per cell
         print('  Run time: %0.1f s (%i-s sim; %i cells; %i workers)' % (gathertime, f.cfg['duration']/1e3, f.numCells, f.nhosts))
         print('  Spikes: %i (%0.2f Hz)' % (f.totalSpikes, f.firingRate))
         print('  Connections: %i (%0.2f per cell)' % (f.totalConnections, f.connsPerCell))
- 
+
 
 ###############################################################################
 ### Save data
 ###############################################################################
 def saveData():
     if f.rank == 0:
-        
+
         dataSave = {'simConfig': f.cfg, 'netParams': replaceFuncObj(f.net.params), 'netCells': f.net.allCells, 'simData': f.allSimData}
 
         if 'timestampFilename' in f.cfg:  # add timestamp to filename
-            if f.cfg['timestampFilename']: 
+            if f.cfg['timestampFilename']:
                 timestamp = time()
                 timestampStr = datetime.fromtimestamp(timestamp).strftime('%Y%m%d_%H%M%S')
                 f.cfg['filename'] = f.cfg['filename']+'-'+timestampStr
@@ -321,7 +321,7 @@ def saveData():
             fn=f.params['filename'].split('.')
             fn='{}{:d}.{}'.format(fn[0],int(round(h.t)),fn[1]) # insert integer time into the middle of file name
             gzip.open(fn, 'wb').write(pk.dumps(f.alls.simData)) # write compressed string
-            print 'Wrote file {}/{} of size {:.3f} MB'.format(os.getcwd(),fn,os.path.getsize(file)/1e6)
+            print ('Wrote file {}/{} of size {:.3f} MB'.format(os.getcwd(),fn,os.path.getsize(file)/1e6))
 
         # Save to json file
         if f.cfg['saveJson']:
@@ -333,16 +333,16 @@ def saveData():
 
         # Save to mat file
         if f.cfg['saveMat']:
-            from scipy.io import savemat 
+            from scipy.io import savemat
             print('Saving output as %s ... ' % (f.cfg['filename']+'.mat'))
             savemat(f.cfg['filename']+'.mat', replaceNoneObj(dataSave))  # replace None and {} with [] so can save in .mat format
             print('Finished saving!')
 
         # Save to HDF5 file
         if f.cfg['saveHDF5']:
-            import h5py 
-            #try: 
-            #import hickle 
+            import h5py
+            #try:
+            #import hickle
             import hdf5storage
             print('Saving output as %s... ' % (f.cfg['filename']+'.hdf5'))
             #hickle.dump(dataSave, f.cfg['filename']+'.hdf5', mode='w')
@@ -351,10 +351,7 @@ def saveData():
             #    dset = f.create_dataset("mydataset", (100,), dtype='i')
             print('Finished saving!')
             fil = h5py.File(f.cfg['filename']+'.hdf5', 'r')
-            print fil.keys()
-            print fil.keys()[0]
+            print (fil.keys())
+            print (fil.keys()[0])
             #except:
             #    print 'Saving to HDF5 format requires the hickle (https://github.com/telegraphic/hickle)'
-
-
-

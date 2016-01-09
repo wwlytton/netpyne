@@ -1,7 +1,7 @@
 """
-utils.py 
+utils.py
 
-Useful functions related to the parameters file, eg. create params file from excel table 
+Useful functions related to the parameters file, eg. create params file from excel table
 
 Contributors: salvadordura@gmail.com
 """
@@ -23,9 +23,9 @@ def importCellParams(fileName, labels, values, key = None):
 	params = {}
 	if fileName.endswith('.py'):
 		try:
-	 		filePath,fileNameOnly = os.path.split(fileName)  # split path from filename
-	  		if filePath not in sys.path:  # add to path if not there (need to import module)
-	 			sys.path.insert(0, filePath)
+			filePath,fileNameOnly = os.path.split(fileName)  # split path from filename
+			if filePath not in sys.path:  # add to path if not there (need to import module)
+				sys.path.insert(0, filePath)
 			moduleName = fileNameOnly.split('.py')[0]  # remove .py to obtain module name
 			exec('import '+ moduleName + ' as tempModule') in locals() # import module dynamically
 			modulePointer = tempModule
@@ -36,9 +36,9 @@ def importCellParams(fileName, labels, values, key = None):
 			params = dict(zip(paramLabels, paramValues))
 			sys.path.remove(filePath)
 		except:
-			print "Error loading cell parameter values from " + fileName
+			print( "Error loading cell parameter values from " + fileName)
 	else:
-		print "Trying to import izhi params from a file without the .py extension"
+		print( "Trying to import izhi params from a file without the .py extension")
 	return params
 
 def importCell(fileName, cellName, type = None, pointNeuronParamLabels = None):
@@ -48,9 +48,9 @@ def importCell(fileName, cellName, type = None, pointNeuronParamLabels = None):
 		cell = getattr(h, cellName)(0,19,0)  # arguments correspond to zloc, type and id -- remove in future (not used internally)
 		secList = cell.allsec()
 	elif fileName.endswith('.py'):
- 		filePath,fileNameOnly = os.path.split(fileName)  # split path from filename
-  		if filePath not in sys.path:  # add to path if not there (need to import module)
- 			sys.path.insert(0, filePath)
+		filePath,fileNameOnly = os.path.split(fileName)  # split path from filename
+		if filePath not in sys.path:  # add to path if not there (need to import module)
+			sys.path.insert(0, filePath)
 		moduleName = fileNameOnly.split('.py')[0]  # remove .py to obtain module name
 		exec('import ' + moduleName + ' as tempModule') in globals(), locals() # import module dynamically
 		modulePointer = tempModule
@@ -71,12 +71,12 @@ def importCell(fileName, cellName, type = None, pointNeuronParamLabels = None):
 			secList = []
 		sys.path.remove(filePath)
 	else:
-		print "File name should be either .hoc or .py file"
+		print( "File name should be either .hoc or .py file")
 		return
 
-	#print 'Loading cell from template: '+fileName
+	#print( 'Loading cell from template: '+fileName)
 	secDic = {}
-	for sec in secList: 
+	for sec in secList:
 		# create new section dict with name of section
 		secName = getSecName(sec)
 		if len(secList) == 1:
@@ -95,7 +95,7 @@ def importCell(fileName, cellName, type = None, pointNeuronParamLabels = None):
 
 		# store 3d geometry
 		numPoints = int(h.n3d())
-		if numPoints: 
+		if numPoints:
 			points = []
 			for ipoint in range(numPoints):
 				x = h.x3d(ipoint)
@@ -108,7 +108,7 @@ def importCell(fileName, cellName, type = None, pointNeuronParamLabels = None):
 		# store mechanisms
 		ignoreMechs = ['dist']
 		mechDic = {}
-		for mech in dir(sec(0.5)):  
+		for mech in dir(sec(0.5)):
 			if h.ismembrane(mech) and mech not in ignoreMechs:  # check if membrane mechanism
 				mechDic[mech] = {}  # create dic for mechanism properties
 				props = [prop.replace('_'+mech, '') for prop in dir(sec(0.5).__getattribute__(mech)) if prop.endswith('_'+mech)]
@@ -116,7 +116,7 @@ def importCell(fileName, cellName, type = None, pointNeuronParamLabels = None):
 				for prop in props:
 					propVals = [seg.__getattribute__(mech).__getattribute__(prop) for seg in sec]
 					if len(set(propVals)) == 1:
-						propVals = propVals[0] 
+						propVals = propVals[0]
 					mechDic[mech][prop] = propVals
 		secDic[secName]['mechs'] = mechDic
 
@@ -145,7 +145,7 @@ def importCell(fileName, cellName, type = None, pointNeuronParamLabels = None):
 							for pointpParamName in pointNeuronParamLabels:
 								pointps[pointpName][pointpParamName] = point.__getattribute__(pointpParamName)
 						except:
-							print 'Error reading point neuron params'
+							print ('Error reading point neuron params')
 
 
 		if syns: secDic[secName]['syns'] = syns
@@ -175,12 +175,12 @@ def importConnFromExcel(fileName, sheetName):
 	colSyn = 3 # 'D'
 	colProb = 5 # 'F'
 	colWeight = 6 # 'G'
-	colAnnot = 8 # 'I' 
+	colAnnot = 8 # 'I'
 
 	outFileName = fileName[:-5]+'_'+sheetName+'.py' # set output file name
 
 	connText = """## Generated using importConnFromExcel() function in params/utils.py \n\nnetParams['connParams'] = [] \n\n"""
-	
+
 	# open excel file and sheet
 	wb = xl.load_workbook(fileName)
 	sheet = wb.get_sheet_by_name(sheetName)
@@ -190,7 +190,7 @@ def importConnFromExcel(fileName, sheetName):
 		f.write(connText)  # write starting text
 		for row in range(1,numRows+1):
 			if sheet.cell(row=row, column=colProb).value:  # if not empty row
-				print 'Creating conn rule for row ' + str(row)
+				print ('Creating conn rule for row ' + str(row))
 				# read row values
 				pre = sheet.cell(row=row, column=colPreTags).value
 				post = sheet.cell(row=row, column=colPostTags).value
@@ -205,7 +205,7 @@ def importConnFromExcel(fileName, sheetName):
 					if i>0: line = line + ", "
 					cond2 = cond.split('=')  # split into key and value
 					line = line + "'" + cond2[0].replace(' ','') + "': " + cond2[1].replace(' ','')   # generate line
-				line = line + "}" # end of preTags		
+				line = line + "}" # end of preTags
 
 				# write postTags
 				line = line + ",\n'postTags': {"
@@ -213,7 +213,7 @@ def importConnFromExcel(fileName, sheetName):
 					if i>0: line = line + ", "
 					cond2 = cond.split('=')  # split into key and value
 					line = line + "'" + cond2[0].replace(' ','') + "': " + cond2[1].replace(' ','')   # generate line
-				line = line + "}" # end of postTags			
+				line = line + "}" # end of postTags
 				line = line + ",\n'connFunc': '" + func + "'"  # write connFunc
 				line = line + ",\n'synReceptor': '" + syn + "'"  # write synReceptor
 				line = line + ",\n'probability': " + str(prob)  # write prob
@@ -221,4 +221,3 @@ def importConnFromExcel(fileName, sheetName):
 				line = line + "})"  # add closing brackets
 				line = line + '\n\n' # new line after each conn rule
 				f.write(line)  # write to file
-				
