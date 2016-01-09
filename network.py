@@ -11,7 +11,7 @@ from pylab import seed, rand, sqrt, exp, transpose, ceil, concatenate, array, ze
 import random
 from time import time
 from neuron import h  # import NEURON
-import framework as f
+from netpyne import framework as f
 
 
 class Network(object):
@@ -105,7 +105,7 @@ class Network(object):
     def fullConn(self, preCells, postCells, connParam):
         ''' Generates connections between all pre and post-syn cells '''
         if all (k in connParam for k in ('delayMean', 'delayVar')):  # generate list of delays based on mean and variance
-            random.seed(f.sim.id32(u'%d'%(f.cfg['randseed']+list(postCells)[0])))  # Reset random number generator
+            random.seed(f.sim.id32('%d'%(f.cfg['randseed']+list(postCells)[0])))  # Reset random number generator
             randDelays = [random.gauss(connParam['delayMean'], connParam['delayVar']) for pre in range(len(preCells)*len(postCells))]  # select random delays based on mean and var params
         else:
             randDelays = None
@@ -143,7 +143,7 @@ class Network(object):
         ''' Generates connections between  maxcons random pre and postsyn cells'''
         if 'maxConns' not in connParam: connParam['maxConns'] = len(preCells)
         if all (k in connParam for k in ('delayMean', 'delayVar')):  # generate list of delays based on mean and variance
-            random.seed(f.sim.id32(u'%d'%(f.cfg['randseed']+list(postCells)[0])))  # Reset random number generator
+            random.seed(f.sim.id32('%d'%(f.cfg['randseed']+list(postCells)[0])))  # Reset random number generator
             randDelays = [random.gauss(connParam['delayMean'], connParam['delayVar']) for pre in range(connParam['maxConns']*len(postCells))] # select random delays based on mean and var params
         else:
             randDelays = None
@@ -217,7 +217,7 @@ class Network(object):
             preInds = array(makeThisConnection.nonzero()[0],dtype='int') # Return True elements of that array for presynaptic cell IDs
 
             if all (k in connParam for k in ('delayMean', 'delayVar')):  # generate list of delays based on mean and variance
-                random.seed(f.sim.id32(u'%d'%(f.cfg['randseed']+list(postCells)[0])))  # Reset random number generator
+                random.seed(f.sim.id32('%d'%(f.cfg['randseed']+list(postCells)[0])))  # Reset random number generator
                 delays = [random.gauss(connParam['delayMean'], connParam['delayVar']) for pre in range(len(preInds))] # select random delays based on mean and var params
             elif 'lengthConst' in connParam: # generate list of delays based on distance between cells (only happens when prob also dist-dep)
                 delays = [self.params['mindelay'] + distances3d[preInd]/float(self.params['velocity']) for preInd in preInds]  # Calculate the delays

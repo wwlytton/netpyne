@@ -16,7 +16,7 @@ import csv
 import pickle
 from mpl_toolkits.mplot3d import Axes3D
 
-import framework as f
+from netpyne import framework as f
 
 ###############################################################################
 ### Simulation-related graph plotting functions

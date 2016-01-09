@@ -1,5 +1,5 @@
 """
-framework.py 
+framework.py
 
 Contains all the model shared variables and modules.
 It is imported as "f" from all other file,  so that any variable or module can be referenced from any module using f.varName
@@ -7,8 +7,7 @@ It is imported as "f" from all other file,  so that any variable or module can b
 Contributors: salvadordura@gmail.com
 """
 
-import sim
-import analysis
-from network import Network
-from cell import Cell, PointNeuron, Pop 
-
+from netpyne import sim
+from netpyne import analysis
+from netpyne.network import Network
+from netpyne.cell import Cell, PointNeuron, Pop

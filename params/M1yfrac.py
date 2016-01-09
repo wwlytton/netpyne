@@ -9,8 +9,8 @@ Contributors: salvadordura@gmail.com
 """
 
 from pylab import array
-from params import utils
-from params.utils import importCell
+from netpyne.params import utils
+from netpyne.params.utils import importCell
 
 
 netParams = {}  # dictionary to store sets of network parameters

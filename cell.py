@@ -8,7 +8,7 @@ Contributors: salvadordura@gmail.com
 
 from pylab import arange, seed, rand, array
 from neuron import h # Import NEURON
-import framework as f
+from netpyne import framework as f
 
 
 ###############################################################################

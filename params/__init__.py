@@ -1,1 +1,1 @@
-from params import utils, HHTut, HybridTut, M1yfrac
+from netpyne.params import utils, HHTut, HybridTut, M1yfrac

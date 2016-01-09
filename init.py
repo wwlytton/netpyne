@@ -1,8 +1,8 @@
 """
 init.py
 
-A modularized framework to develop and run large-scale network simulations. 
-Built solely in Python with MPI support. 
+A modularized framework to develop and run large-scale network simulations.
+Built solely in Python with MPI support.
 
 Usage:
     python init.py # Run simulation, optionally plot a raster
@@ -13,7 +13,7 @@ MPI usage:
 Contributors: salvadordura@gmail.com
 """
 
-import framework as f
+from netpyne import framework as f
 
 def createAndSimulate(netParams, simConfig):
     ''' Sequence of commands to run full model '''
@@ -22,7 +22,7 @@ def createAndSimulate(netParams, simConfig):
     f.net.createCells()                 # instantiate network cells based on defined populations
     f.net.connectCells()                # create connections between cells based on params
     f.sim.setupRecording()              # setup variables to record for each cell (spikes, V traces, etc)
-    f.sim.runSim()                      # run parallel Neuron simulation  
+    f.sim.runSim()                      # run parallel Neuron simulation
     f.sim.gatherData()                  # gather spiking data and cell info from each node
     f.sim.saveData()                    # save params, cell info and sim output to file (pickle,mat,txt,etc)
     f.analysis.plotData()               # plot spike raster
@@ -31,5 +31,4 @@ def createAndSimulate(netParams, simConfig):
 # Main call example
 # createAndSimulate(                                      # execute sequence of commands to run full model
 #    simConfig = M1yfrac.simConfig,     # pass simulation config options and network params as arguments
-#    netParams = M1yfrac.netParams)      
-
+#    netParams = M1yfrac.netParams)

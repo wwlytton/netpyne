@@ -14,8 +14,8 @@ import inspect
 import pickle as pk
 import hashlib
 from neuron import h, init # Import NEURON
-import framework as f
-from params import default
+from netpyne import framework as f
+from netpyne.params import default
 
 ###############################################################################
 # initialize variables and MPI
