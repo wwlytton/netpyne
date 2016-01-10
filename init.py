@@ -26,7 +26,7 @@ def createAndSimulate(netParams, simConfig):
     f.sim.gatherData()                  # gather spiking data and cell info from each node
     f.sim.saveData()                    # save params, cell info and sim output to file (pickle,mat,txt,etc)
     f.analysis.plotData()               # plot spike raster
-
+    
 
 # Main call example
 # createAndSimulate(                                      # execute sequence of commands to run full model

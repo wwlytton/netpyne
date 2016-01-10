@@ -11,3 +11,4 @@ from netpyne import sim
 from netpyne import analysis
 from netpyne.network import Network
 from netpyne.cell import Cell, PointNeuron, Pop
+import pylab
