@@ -27,13 +27,14 @@ install:
     - pwd
     - python setup.py install
     
-    
-    
+    - export NEURON_HOME=/home/travis/neuron/nrn/x86_64
+  
 
 script:
-
-  - pwd
-
+    - cd doc/source/code/
+    - $NEURON_HOME/nrnivmodl mod
+    - python tut1.py
+    
 
 notifications: 
     email: false
