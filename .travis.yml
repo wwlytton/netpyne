@@ -31,9 +31,11 @@ install:
   
 
 script:
-    - cd doc/source/code/
-    - $NEURON_HOME/bin/nrnivmodl mod
-    - python tut1.py
+    # - cd doc/source/code/
+    # - $NEURON_HOME/bin/nrnivmodl mod
+    # - python tut1.py
+    - cd examples/HHTut
+    - python HHTut_run.py
     
 
 notifications: 
