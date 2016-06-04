@@ -27,12 +27,12 @@ install:
     - pwd
     - python setup.py install
     
-    - export NEURON_HOME=/home/travis/neuron/nrn/x86_64
+    - export NEURON_HOME=/home/travis/neuron/nrn/x86_64/
   
 
 script:
     - cd doc/source/code/
-    - $NEURON_HOME/nrnivmodl mod
+    - $NEURON_HOME/bin/nrnivmodl mod
     - python tut1.py
     
 
