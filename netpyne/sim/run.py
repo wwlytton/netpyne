@@ -159,6 +159,9 @@ def preRunRestore ():
         sim.fih.append(h.FInitializeHandler(0, sim.recordLFPHandler))  # initialize imemb
 
 
+#------------------------------------------------------------------------------
+# Run from previously saved state
+#------------------------------------------------------------------------------
 def runFromSavedState (file="state.sav"):
     from .. import sim
 
