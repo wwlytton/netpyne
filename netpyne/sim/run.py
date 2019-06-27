@@ -162,7 +162,7 @@ def preRunRestore ():
 #------------------------------------------------------------------------------
 # Run from previously saved state
 #------------------------------------------------------------------------------
-def runFromSavedState (file="state.sav"):
+def runFromSavedState (file):
     from .. import sim
 
     try: 
