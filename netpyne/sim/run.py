@@ -27,7 +27,6 @@ from . import utils
 def preRun ():
     from .. import sim
 
-
     # set initial v of cells
     for cell in sim.net.cells:
        sim.fih.append(h.FInitializeHandler(0, cell.initV))
@@ -97,6 +96,69 @@ def preRun ():
         sim.fih.append(h.FInitializeHandler(0, sim.recordLFPHandler))  # initialize imemb
 
 
+def preRunRestore ():
+    from .. import sim
+
+    # cvode variables
+    sim.cvode.active(int(sim.cfg.cvode_active))
+    sim.cvode.cache_efficient(int(sim.cfg.cache_efficient))
+    sim.cvode.atol(sim.cfg.cvode_atol)
+
+    # set h global params
+    sim.setGlobals()
+
+    # set h.dt
+    h.dt = sim.cfg.dt
+
+    # parallelcontext vars
+    sim.pc.set_maxstep(10)
+    mindelay = sim.pc.allreduce(sim.pc.set_maxstep(10), 2) # flag 2 returns minimum value
+    if sim.rank==0 and sim.cfg.verbose: print(('Minimum delay (time-step for queue exchange) is %.2f'%(mindelay)))
+    sim.pc.setup_transfer()  # setup transfer of source_var to target_var
+
+    # handler for printing out time during simulation run
+    if sim.rank == 0 and sim.cfg.printRunTime:
+        def printRunTime():
+            for i in range(int(sim.cfg.printRunTime*1000.0), int(sim.cfg.duration), int(sim.cfg.printRunTime*1000.0)):
+                sim.cvode.event(i, 'print ' + str(i/1000.0) + ',"s"')
+        sim.printRunTime = printRunTime
+        sim.fih.append(h.FInitializeHandler(1, sim.printRunTime))
+
+    # set global index used by all instances of the Random123 instances of Random
+    if sim.cfg.rand123GlobalIndex is not None: 
+        rand = h.Random()
+        rand.Random123_globalindex(int(sim.cfg.rand123GlobalIndex))
+
+    # reset all netstim randomizers so runs are always equivalent
+    for cell in sim.net.cells:
+        if cell.tags.get('cellModel') == 'NetStim':
+            #cell.hRandom.Random123(sim.hashStr('NetStim'), cell.gid, cell.params['seed'])
+            utils._init_stim_randomizer(cell.hRandom, 'NetStim', cell.gid, cell.params['seed'])
+            cell.hRandom.negexp(1)
+            cell.hPointp.noiseFromRandom(cell.hRandom)
+        pop = sim.net.pops[cell.tags['pop']]
+        if 'originalFormat' in pop.tags and pop.tags['originalFormat'] == 'NeuroML2_SpikeSource':
+            if sim.cfg.verbose: print("== Setting random generator in NeuroML spike generator")
+            cell.initRandom()
+        else:
+            for stim in cell.stims:
+                if 'hRandom' in stim:
+                    #stim['hRandom'].Random123(sim.hashStr(stim['source']), cell.gid, stim['seed'])
+                    utils._init_stim_randomizer(stim['hRandom'], stim['type'], cell.gid, stim['seed'])
+                    stim['hRandom'].negexp(1)
+                    # Check if noiseFromRandom is in stim['hObj']; see https://github.com/Neurosim-lab/netpyne/issues/219
+                    if not isinstance(stim['hObj'].noiseFromRandom, dict):
+                        stim['hObj'].noiseFromRandom(stim['hRandom'])
+    # handler for recording LFP
+    if sim.cfg.recordLFP:
+        def recordLFPHandler():
+            for i in np.arange(sim.cfg.recordStep, sim.cfg.duration+sim.cfg.recordStep, sim.cfg.recordStep):
+                sim.cvode.event(i, sim.calculateLFP)
+
+        sim.recordLFPHandler = recordLFPHandler
+        sim.fih.append(h.FInitializeHandler(0, sim.recordLFPHandler))  # initialize imemb
+
+
 def runFromSavedState (file="state.sav"):
     from .. import sim
 
@@ -113,6 +175,7 @@ def runFromSavedState (file="state.sav"):
     except:
         print("Restore state from %s failed; ensure that is from same sim"%file)
 
+    # preRunRestore()
     sim.pc.barrier()
     sim.timing('start', 'runTime')
 
