@@ -46,8 +46,8 @@ def simulate ():
 #------------------------------------------------------------------------------
 # Wrapper to simulate network from saved state
 #------------------------------------------------------------------------------
-def simFromSavedState (file="state.sav"):
-    ''' Sequence of commands to simulate network '''
+def restoreSimulate (file="state.sav"):
+    ''' Restore from a file then simulate '''
     from .. import sim
     sim.runFromSavedState(file)
     sim.gatherData()         # gather spiking data and cell info from each node
