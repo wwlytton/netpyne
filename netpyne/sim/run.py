@@ -96,7 +96,7 @@ def preRun ():
         sim.fih.append(h.FInitializeHandler(0, sim.recordLFPHandler))  # initialize imemb
 
 
-def preRunRestore ():
+def preRestoreRun ():
     from .. import sim
 
     # cvode variables
