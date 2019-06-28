@@ -32,7 +32,7 @@ from .setup import initialize, setNet, setNetParams, setSimCfg, createParallelCo
 	readCmdLineArgs, setupRecording, setupRecordLFP, setGlobals
 
 # import run functions
-from .run import preRun, runSim, runSimWithIntervalFunc, loadBalance, calculateLFP
+from .run import preRun, runSim, runSimWithIntervalFunc, loadBalance, calculateLFP, runFromSavedState, preRestoreRun ()
 
 # import gather functions
 from .gather import gatherData, _gatherAllCellTags, _gatherAllCellConnPreGids, _gatherCells, fileGather
