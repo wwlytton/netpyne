@@ -166,9 +166,11 @@ def runFromSavedState (file):
     from .. import sim
 
     try: 
-        fp=open(file,"rb")
+        fp=h.File()
+        fp.ropen(file)
     except: 
         print("Unable to open %s"%file)
+        return
     
     try: 
         ss = h.SaveState()
@@ -177,6 +179,7 @@ def runFromSavedState (file):
         print('time after restoring state: {time}'.format(time = h.t))
     except:
         print("Restore state from %s failed; ensure that is from same sim"%file)
+        return
 
     # preRunRestore()
     sim.pc.barrier()
