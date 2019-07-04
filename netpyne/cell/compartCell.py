@@ -54,6 +54,16 @@ class CompartCell (Cell):
         if create: self.create()  # create cell 
         if associateGid: self.associateGid() # register cell for this node
 
+    def __str__ (self):
+        try:
+            gid = self.gid # only use if gid exists
+            return 'gid=%d'%(self.gid)
+        except:
+            return 'no gid'
+
+    def __repr__ (self):
+        return self.__str__()
+
     def create (self):
         from .. import sim
 
@@ -317,6 +327,7 @@ class CompartCell (Cell):
             if sectName not in self.secs:
                 self.secs[sectName] = Dict()  # create sect dict if doesn't exist
             if 'hObj' not in self.secs[sectName] or self.secs[sectName]['hObj'] in [None, {}, []]: 
+                # self.secs[sectName]['hObj'] = h.Section(name=sectName, cell=prop)  # create h Section object
                 self.secs[sectName]['hObj'] = h.Section(name=sectName, cell=self)  # create h Section object
             sec = self.secs[sectName]  # pointer to section
 
