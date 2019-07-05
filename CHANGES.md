@@ -4,15 +4,21 @@
 
 - Added saveCellConns, pt3dRelativeToCellLocation and invertedYCoord cfg options
 
-- Fixed bug plotting traces with one fig per trace
+- Modified plotLFP and plotRatePSD to use Morlet wavelet for PSD calculation
 
 - Added lineWidth argument to some raster and lfp plots
 
 - Added shuffling test to granger causality functions
 
+- Fixed bug plotting traces with one fig per trace
+
 - Fixed bug in granger functions - required conversion to int 
 
 - Fixed bug in plotShape when cells sections not available
+
+- Return meaningful cell info via 'repr' and 'str' for pointCell, compartCell
+
+- Fixed spelling typos in documentation
 
 # Version 0.9.2
 
